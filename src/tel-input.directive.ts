@@ -1,4 +1,4 @@
-import { Directive, ElementRef, forwardRef } from '@angular/core';
+import { AfterContentInit, Directive, ElementRef, forwardRef, OnInit } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor, NgControl } from '@angular/forms';
 import intlInput from './intl-tel-input';
 import { asYouType } from 'libphonenumber-js';
@@ -14,7 +14,7 @@ export const CUSTOM_INPUT_CONTROL_VALUE_ACCESSOR: any = {
 @Directive({
 	selector: 'input[telInput]'
 })
-export class TelInputDirective implements ControlValueAccessor {
+export class TelInputDirective implements ControlValueAccessor, AfterContentInit {
 
 	private inputInterface: any;
 	private onTouchedCallback: () => void = noop;
@@ -26,21 +26,7 @@ export class TelInputDirective implements ControlValueAccessor {
 		private telInput: ElementRef,
 		private control : NgControl
 	) {
-		this.inputInterface = new intlInput(telInput.nativeElement, {preferredCountries: ['ru']});
 
-		telInput.nativeElement.addEventListener('change', event => {
-			let currentCountry = this.inputInterface.instance.selectedCountryData;
-			this.formatter = new asYouType(currentCountry.iso2);
-			this.telInput.nativeElement.value = this.formatter.input(event.target.value);
-			this.formatter.reset();
-			this.control.control.setErrors({
-				phone: !this.inputInterface.isValidNumber()
-			});
-		});
-
-		telInput.nativeElement.addEventListener('input', event => {
-			this.value = this.inputInterface.getPlaintextNumber(event.target.value);
-		});
 	}
 
 	// get accessor
@@ -73,6 +59,24 @@ export class TelInputDirective implements ControlValueAccessor {
 	// From ControlValueAccessor interface
 	registerOnTouched(fn: any) {
 		this.onTouchedCallback = fn;
+	}
+
+	ngAfterContentInit() {
+		this.inputInterface = new intlInput(this.telInput.nativeElement, {preferredCountries: ['ru']});
+
+		this.telInput.nativeElement.addEventListener('change', event => {
+			let currentCountry = this.inputInterface.instance.selectedCountryData;
+			this.formatter = new asYouType(currentCountry.iso2);
+			this.telInput.nativeElement.value = this.formatter.input(event.target.value);
+			this.formatter.reset();
+			this.control.control.setErrors({
+				phone: !this.inputInterface.isValidNumber()
+			});
+		});
+
+		this.telInput.nativeElement.addEventListener('input', event => {
+			this.value = this.inputInterface.getPlaintextNumber(event.target.value);
+		});
 	}
 
 
