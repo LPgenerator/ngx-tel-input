@@ -1,4 +1,4 @@
-# ngx-tel-input
+npm publish# ngx-tel-input
 
 ## Installation
 

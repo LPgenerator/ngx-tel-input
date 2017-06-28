@@ -1,6 +1,5 @@
-import { Directive, ElementRef, forwardRef, HostListener, OnInit } from '@angular/core';
-import { NgControl } from "@angular/forms";
-import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
+import { Directive, ElementRef, forwardRef } from '@angular/core';
+import { NG_VALUE_ACCESSOR, ControlValueAccessor, NgControl } from '@angular/forms';
 import intlInput from './intl-tel-input';
 import { asYouType } from 'libphonenumber-js';
 
@@ -15,7 +14,7 @@ export const CUSTOM_INPUT_CONTROL_VALUE_ACCESSOR: any = {
 @Directive({
 	selector: 'input[telInput]'
 })
-export class TelInputDirective implements ControlValueAccessor, OnInit {
+export class TelInputDirective implements ControlValueAccessor {
 
 	private inputInterface: any;
 	private onTouchedCallback: () => void = noop;

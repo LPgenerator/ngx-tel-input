@@ -66,6 +66,7 @@
     "node": ">=6.0.0"
   },
   "dependencies": {
+    "@angular/forms": "^4.2.4",
     "libphonenumber-js": "^0.4.16"
   }
 }
