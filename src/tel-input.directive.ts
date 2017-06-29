@@ -26,7 +26,6 @@ export class TelInputDirective implements ControlValueAccessor, AfterContentInit
 		private telInput: ElementRef,
 		private control : NgControl
 	) {
-
 	}
 
 	// get accessor
@@ -41,9 +40,9 @@ export class TelInputDirective implements ControlValueAccessor, AfterContentInit
 		this.innerValue = v;
 
 		if (!v) { return; }
-		this.control.control.setErrors({
-			phone: !this.inputInterface.isValidNumber()
-		});
+		if (!this.inputInterface.isValidNumber()) {
+			this.control.control.setErrors({phone: true});
+		}
 	}
 
 	// Записываем начальное состояние модели
@@ -69,9 +68,6 @@ export class TelInputDirective implements ControlValueAccessor, AfterContentInit
 			this.formatter = new asYouType(currentCountry.iso2);
 			this.telInput.nativeElement.value = this.formatter.input(event.target.value);
 			this.formatter.reset();
-			this.control.control.setErrors({
-				phone: !this.inputInterface.isValidNumber()
-			});
 		});
 
 		this.telInput.nativeElement.addEventListener('input', event => {
