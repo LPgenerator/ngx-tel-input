@@ -67,6 +67,8 @@
   },
   "dependencies": {
     "@angular/forms": "^4.2.4",
-    "libphonenumber-js": "^0.4.16"
+    "angular2-text-mask": "^8.0.3",
+    "libphonenumber-js": "^0.4.16",
+    "ng-select": "^1.0.0-beta.6"
   }
 }

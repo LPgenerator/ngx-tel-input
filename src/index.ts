@@ -1,19 +1,25 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TelInputDirective } from './tel-input.directive';
+import { TextMaskModule } from 'angular2-text-mask';
+import { TelInputComponent } from './tel-input.component';
+import { FormsModule } from '@angular/forms';
+import { SelectModule } from 'ng-select';
 
-export * from "./tel-input.directive";
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+	  TextMaskModule,
+    FormsModule,
+	  SelectModule
   ],
   declarations: [
-    TelInputDirective
+    TelInputComponent
   ],
   exports: [
-    TelInputDirective
-  ]
+	  TelInputComponent
+  ],
+  providers: []
 })
 export class TelInputModule {
   static forRoot(): ModuleWithProviders {

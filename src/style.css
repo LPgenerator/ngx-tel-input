@@ -1,0 +1,67 @@
+.tel-input{
+	display: inline-flex;
+	position: relative;
+}
+.tel-input input {
+	width: 100%;
+	padding-right: 60px;
+}
+ng-select /deep/ .value .country{
+	display:none;
+}
+ng-select /deep/ select-dropdown > div .filter input{
+	font-size: inherit;
+}
+ng-select{
+	width: 60px;
+	position: absolute;
+	right: 0;
+	top: 0;
+	height: 100%;
+}
+ng-select /deep/ > div {
+	height: 100%;
+	border-left: none;
+}
+
+ng-select /deep/ select-dropdown > div{
+	width: auto !important;
+	border-top: 1px solid #ccc;
+}
+
+ng-select /deep/ > div > div.single > div.toggle{
+	line-height: normal;
+	font-size: 8px;
+	color: #000;
+}
+
+ng-select /deep/ > div > div.single > div.toggle:hover{
+	background: transparent;
+}
+
+ng-select /deep/ > div > div.single > div.value, ng-select /deep/ > div > div.single > div.placeholder{
+	line-height: normal;
+}
+
+ng-select /deep/ > div > div.single {
+	height: 100%;
+	align-items: center;
+}
+
+ng-select /deep/ * {
+	font-family: inherit;
+	outline: none;
+}
+
+ng-select /deep/ select-dropdown > div .filter {
+	padding: 10px;
+	background: none repeat scroll 0 0 #eaf3f7;
+}
+
+ng-select /deep/ select-dropdown > div .filter input{
+	outline: none;
+}
+
+.flag{
+	vertical-align: middle;
+}

@@ -1,4 +1,3 @@
 <h1>NGX-TEL-INPUT</h1>
-<input type="tel" telInput placeholder="+7 (999) 820 55 02" [(ngModel)]="tel" #control="ngModel" required minlength="10">
+<tel-input required minlength="10"></tel-input>
 <p>{{tel}}</p>
-{{control.errors | json}}
