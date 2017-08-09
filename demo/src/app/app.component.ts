@@ -8,18 +8,5 @@ import { Component } from '@angular/core';
 export class AppComponent {
   constructor(){}
 
-  public countries = {
-    'au': {
-      name: 'Австралия',
-      flag: 'au',
-      mask: '+61-#-####-####'
-    },
-    'at' : {
-      name : 'Австрия',
-      flag : 'at',
-      mask : '+43(###)###-####'
-    }
-  };
-
   public tel = '';
 }

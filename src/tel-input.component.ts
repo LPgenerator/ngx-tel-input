@@ -1,12 +1,23 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, forwardRef, Injector } from '@angular/core';
 import { CountriesList, ItelInputCountries } from './countries';
+
+import { NG_VALUE_ACCESSOR, ControlValueAccessor, NgControl } from '@angular/forms';
+
+const noop = () => {
+};
+
+export const CUSTOM_INPUT_CONTROL_VALUE_ACCESSOR: any = {
+	provide: NG_VALUE_ACCESSOR,
+	useExisting: forwardRef(() => TelInputComponent),
+	multi: true
+};
 
 @Component({
   selector: 'tel-input',
 	styleUrls: ['style.css'],
   template: `
     <div class="tel-input">
-	    <input #input type="tel" [ngModel]="number" [textMask]="{mask: mask, showMask: true}" (click)="$event.target.select()"/>
+	    <input #input (input)="inputEvent($event)" type="tel" [ngModel]="number" [textMask]="{mask: mask, showMask: true}" (click)="$event.target.select()"/>
 	    <ng-select
 					    [(ngModel)]="selected"
 					    [options]="countries" 
@@ -19,9 +30,58 @@ import { CountriesList, ItelInputCountries } from './countries';
 		    </ng-template>
 	    </ng-select>
     </div>
-  `
+  `,
+	providers: [CUSTOM_INPUT_CONTROL_VALUE_ACCESSOR]
 })
-export class TelInputComponent implements OnInit{
+export class TelInputComponent implements OnInit, ControlValueAccessor {
+	//The internal data model
+	private innerValue: any = '';
+
+	//Placeholders for the callbacks which are later providesd
+	//by the Control Value Accessor
+	private onTouchedCallback: () => void = noop;
+	private onChangeCallback: (_: any) => void = noop;
+
+	//get accessor
+	get value(): any {
+		return this.innerValue;
+	};
+
+	//set accessor including call the onchange callback
+	set value(v: any) {
+		if ( this.checkErrors(v) ) { return; }
+		if (v !== this.innerValue) {
+			const val = v.replace( /\D/g, '');
+			this.innerValue = val;
+			this.onChangeCallback(val);
+		}
+	}
+
+	private checkErrors(val) {
+		const hasUnderscore = /\_/.test(val);
+		if ( hasUnderscore ) {
+			this.model.control.setErrors({phone: true});
+		}
+		return hasUnderscore;
+	}
+
+ //From ControlValueAccessor interface
+	writeValue(value: any) {
+		if (value !== this.innerValue) {
+			this.innerValue = value;
+		}
+	}
+
+	//From ControlValueAccessor interface
+	registerOnChange(fn: any) {
+		this.onChangeCallback = fn;
+	}
+
+	//From ControlValueAccessor interface
+	registerOnTouched(fn: any) {
+		this.onTouchedCallback = fn;
+	}
+
 	@Input('defaultCountry')defaultCountry = 'ru';
 	@Input('countries')countriesList: ItelInputCountries = CountriesList;
 	@ViewChild('input')input;
@@ -35,14 +95,22 @@ export class TelInputComponent implements OnInit{
 		return this._mask;
 	}
 
+	private model: NgControl;
+
+	public inputEvent(event) {
+		this.value = event.target.value;
+	}
+
 	public selectedEvent(event) {
 		this.input.nativeElement.value = '';
 		this.mask = this.countriesList[event.value].mask;
 	}
 
-  constructor() {}
+  constructor(private injector: Injector) {}
 
   ngOnInit() {
+	  this.model = this.injector.get(NgControl);
+
 		this.selected = this.defaultCountry;
 	  this.countries = Object.keys(this.countriesList).map(country => {
 		  return {

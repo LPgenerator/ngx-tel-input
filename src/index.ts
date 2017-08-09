@@ -18,14 +18,12 @@ import { SelectModule } from 'ng-select';
   ],
   exports: [
 	  TelInputComponent
-  ],
-  providers: []
+  ]
 })
 export class TelInputModule {
   static forRoot(): ModuleWithProviders {
     return {
       ngModule: TelInputModule,
-      providers: []
     };
   }
 }

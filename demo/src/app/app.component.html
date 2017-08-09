@@ -1,3 +1,4 @@
 <h1>NGX-TEL-INPUT</h1>
-<tel-input required minlength="10"></tel-input>
+<tel-input [(ngModel)]="tel" #control="ngModel" name="tel"></tel-input>
 <p>{{tel}}</p>
+{{control.errors | json}}
